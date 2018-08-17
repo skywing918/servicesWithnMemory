@@ -37,12 +37,12 @@ namespace WebApi.Services
                     Username = "supUser",
                     FirstName = "kyle",
                     LastName = "Zhang",
-                    MobilePhone= "18817594970",
+                    MobilePhone= "123909123",
                     UserId = "0001",
                     Status = "Active"
                 };
 
-                string UserPassword = "P@ssw0rd";
+                string UserPassword = "1234567";
                 var _user = Create(poweruser, UserPassword);
             }
         }
