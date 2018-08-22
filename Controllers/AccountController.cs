@@ -107,6 +107,15 @@ namespace WebApi.Controllers
             return Ok(userDtos);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            // get the user to verifty
+            var userToVerify = await _userManager.FindByIdAsync(id.ToString());
+            await _userManager.DeleteAsync(userToVerify);
+            return Ok();
+        }
+
         private async Task<object> GetClaimsIdentity(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
