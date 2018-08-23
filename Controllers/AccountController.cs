@@ -111,6 +111,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var curr = await _userManager.FindByIdAsync(id.ToString());
+            var roles = await _userManager.GetRolesAsync(curr);
             var userDto = new UserDto
             {
                 Id = curr.Id,
@@ -118,6 +119,7 @@ namespace WebApi.Controllers
                 FullName = curr.FullName,
                 MobilePhone = curr.PhoneNumber,
                 UserStatus = curr.Status,
+                UserRole = roles.FirstOrDefault(),
                 Registered = curr.Registered
             };
             return Ok(userDto);
@@ -133,6 +135,7 @@ namespace WebApi.Controllers
                return  BadRequest(new { message = "the user is not existed." });
             }
 
+            var currRole = await _userManager.GetRolesAsync(userToVerify);
             userToVerify.UserName = userDto.UserName;
             userToVerify.FullName = userDto.FullName;
             userToVerify.PhoneNumber = userDto.MobilePhone;
@@ -141,7 +144,12 @@ namespace WebApi.Controllers
             try
             {
                 // save 
-                await _userManager.UpdateAsync(userToVerify);
+                var updated = await _userManager.UpdateAsync(userToVerify);
+                if(updated.Succeeded && !string.IsNullOrEmpty(userDto.UserRole))
+                {
+                    await _userManager.RemoveFromRolesAsync(userToVerify, currRole);
+                    await _userManager.AddToRoleAsync(userToVerify, userDto.UserRole);
+                }
                 return Ok();
             }
             catch (AppException ex)
