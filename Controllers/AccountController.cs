@@ -107,6 +107,50 @@ namespace WebApi.Controllers
             return Ok(userDtos);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var curr = await _userManager.FindByIdAsync(id.ToString());
+            var userDto = new UserDto
+            {
+                Id = curr.Id,
+                UserName = curr.UserName,
+                FullName = curr.FullName,
+                MobilePhone = curr.PhoneNumber,
+                UserStatus = curr.Status,
+                Registered = curr.Registered
+            };
+            return Ok(userDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody]UserDto userDto)
+        {
+
+            var userToVerify = await _userManager.FindByIdAsync(id.ToString());
+            if (userToVerify == null)
+            {
+               return  BadRequest(new { message = "the user is not existed." });
+            }
+
+            userToVerify.UserName = userDto.UserName;
+            userToVerify.FullName = userDto.FullName;
+            userToVerify.PhoneNumber = userDto.MobilePhone;
+            userToVerify.Status = userDto.UserStatus;
+
+            try
+            {
+                // save 
+                await _userManager.UpdateAsync(userToVerify);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
