@@ -159,6 +159,29 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpPut("reset/{id}")]
+        public async Task<IActionResult> Reset(string id)
+        {
+            try
+            {
+                var userToVerify = await _userManager.FindByIdAsync(id.ToString());
+                var token = await _userManager.GeneratePasswordResetTokenAsync(userToVerify);
+                var currPW = await _userManager.ResetPasswordAsync(userToVerify, token, "P@ssw0rd1");
+                if (currPW.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(new { message = "failure to reset" });
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
