@@ -66,6 +66,7 @@ namespace WebApi.Controllers
                     FullName = userDto.FullName,
                     PhoneNumber = userDto.MobilePhone,
                     Status = userDto.UserStatus,
+                    Photo = userDto.Photo,
                     Registered = DateTime.Now
                 };
 
@@ -225,6 +226,7 @@ namespace WebApi.Controllers
                     Username = userToVerify.UserName,
                     FullName = userToVerify.FullName,
                     Role = roles.FirstOrDefault(),
+                    Photo = userToVerify.Photo,
                     Token = tokenString
                 });
             }

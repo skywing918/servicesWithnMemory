@@ -10,6 +10,7 @@ namespace WebApi.Dtos
         public string UserRole { get; set; }
         public string MobilePhone { get; set; }
         public string UserStatus { get; set; }
+        public string Photo { get; set; }
         public DateTime Registered { get; set; }
         public string Password { get; set; }
     }

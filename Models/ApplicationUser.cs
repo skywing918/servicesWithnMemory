@@ -14,7 +14,7 @@ namespace WebApi.Models
         public string FullName { get; set; }
 
         public string Status { get; set; }
-        public string PictureUrl { get; set; }
+        public string Photo { get; set; }
 
         public DateTime Registered { get; set; }
     }

@@ -115,6 +115,7 @@ namespace WebApi
                 UserName = Configuration.GetSection("UserSettings")["UserName"],
                 FullName = Configuration.GetSection("UserSettings")["FullName"],
                 PhoneNumber = Configuration.GetSection("UserSettings")["PhoneNumber"],
+                Photo = Configuration.GetSection("UserSettings")["Photo"],
                 Status = "Active",
                 Registered = DateTime.Now                
             };
