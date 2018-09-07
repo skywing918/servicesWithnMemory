@@ -87,13 +87,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var users = _userManager.Users;
 
-            var userDtos = users.ToList().Select(curr =>
+            var userDtos = await Task.WhenAll(users.ToList().Select(async curr =>
             {
-                var roles = _userManager.GetRolesAsync(curr).Result;
+                var roles = await _userManager.GetRolesAsync(curr);
                 return new UserDto
                 {
                     Id=curr.Id,
@@ -102,9 +102,10 @@ namespace WebApi.Controllers
                     MobilePhone = curr.PhoneNumber,
                     UserStatus = curr.Status,
                     UserRole = roles.FirstOrDefault(),
+                    Photo = curr.Photo,
                     Registered = curr.Registered
                 };
-            });
+            })).ConfigureAwait(false);
             return Ok(userDtos);
         }
 
